@@ -16,14 +16,14 @@ if (process.argv.length > 1) {
 
 		process.exit();
 	}
-	else if (process.argv[2] == '--f') {
+	if (process.argv[2] == '--f') {
 		if (!process.argv[3]) {
 			console.log('Bad command format');
-			process.stdin.pause();
+			process.exit();
 		}
 		fileName = process.argv[3];
 	}
-	else if (process.argv[2] == '--d' || process.argv[4] == '--d') {
+	if (process.argv[2] == '--d' || process.argv[4] == '--d') {
 		operation = decrypt;
 	}
 }
@@ -35,12 +35,12 @@ process.stdin.on('data', text => {
 	key = text.toString();
 	
 	fs.readFile(filePath, 'utf8', (err, data) => {
-		if (err) console.log(err);
+		if (err) throw err;
 		
 		data = operation(data, key);
 
 		fs.writeFile(filePath, data, err => {
-			if (err) console.log(err);
+			if (err) throw err;
 
 			process.exit();
 		});
